@@ -1,5 +1,7 @@
 r"""This module implements a parametric histoGAN / DCGAN architecture suitable for generating histology images."""
 
+from math import log2, ceil
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as func
@@ -176,40 +178,40 @@ class HistoDiscriminator(nn.Module):
 
     return out
 
-def histoGAN224(mode="last", condition_size=2, condition_embedding_size=100):
-  f"""Configuration used for 224x224 image generation.
-  For details see :class:`HistoGenerator` and :class:`HistoDiscriminator`
-  """
-  channel_factors = [1, 2, 4, 6, 8]
-  gen = HistoGenerator(
-    channel_factors=list(reversed(channel_factors)),
-    condition_size=condition_size,
-    condition_embedding_size=condition_embedding_size,
-    target_size=224
-  )
-  disc = HistoDiscriminator(
-    channel_factors=channel_factors,
-    condition_size=condition_size,
-    condition_embedding_size=condition_embedding_size,
-    mode=mode
-  )
-  return gen, disc
+def define_histo_GAN(channel_factors):
+  max_size = 4 * 2 ** (len(channel_factors) + 1)
+  def result(mode="last", size=None, condition_size=2,
+             condition_embedding_size=100):
+    f"""Configuration used for {max_size}x{max_size} image generation.
+    For details see :class:`HistoGenerator` and :class:`HistoDiscriminator`
+    """
+    size = size or max_size
+    gen = HistoGenerator(
+      channel_factors=list(reversed(channel_factors)),
+      condition_size=condition_size,
+      condition_embedding_size=condition_embedding_size,
+      target_size=size
+    )
+    disc = HistoDiscriminator(
+      channel_factors=channel_factors,
+      condition_size=condition_size,
+      condition_embedding_size=condition_embedding_size,
+      mode=mode
+    )
+    return gen, disc
+  return result
 
-def histoGAN512(mode="first", condition_size=2, condition_embedding_size=100):
-  f"""Configuration used for 224x224 image generation.
-  For details see :class:`HistoGenerator` and :class:`HistoDiscriminator`
-  """
-  channel_factors = [2, 4, 6, 8, 10, 12]
-  gen = HistoGenerator(
-    channel_factors=list(reversed(channel_factors)),
-    condition_size=condition_size,
+histoGAN32 = define_histo_GAN([1, 2])
+histoGAN64 = define_histo_GAN([1, 2, 4])
+histoGAN128 = define_histo_GAN([1, 2, 4, 6])
+histoGAN256 = define_histo_GAN([1, 2, 4, 6, 8])
+histoGAN512 = define_histo_GAN([2, 4, 6, 8, 10, 12])
+
+def get_histo_GAN(size, mode="last", condition_size=2,
+                  condition_embedding_size=100):
+  max_size = 2 ** int(ceil(log2(size)))
+  return eval(f"histoGAN{max_size}")(
+    mode=mode, condition_size=condition_size,
     condition_embedding_size=condition_embedding_size,
-    target_size=512
+    size=size
   )
-  disc = HistoDiscriminator(
-    channel_factors=channel_factors,
-    condition_size=condition_size,
-    condition_embedding_size=condition_embedding_size,
-    mode=mode
-  )
-  return gen, disc

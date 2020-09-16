@@ -1,6 +1,8 @@
+from math import log2, ceil
+
 from histogan.data import GANData
 from histogan.training import MsiTraining
-from histogan.modules.histogan import histoGAN512
+from histogan.modules.histogan import get_histo_GAN
 from histogan.parser import parse_args
 
 from torchsupport.structured import DataParallel as SDP
@@ -9,9 +11,13 @@ if __name__ == "__main__":
   opt = parse_args()
 
   data = GANData(opt.path)
-  generator, discriminator = histoGAN512(
-    mode=opt.mode, condition_embedding_size=opt.condition
+
+  generator, discriminator = get_histo_GAN(
+    opt.size,
+    mode=opt.mode,
+    condition_embedding_size=opt.condition
   )
+
   if opt.device != "cpu":
     generator = SDP(generator)
     discriminator = SDP(discriminator)

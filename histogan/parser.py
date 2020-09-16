@@ -8,6 +8,8 @@ def parse_args():
                       help='path to the training dataset.')
   parser.add_argument('--batch-size', type=int, nargs='?', default=32,
                       help='training batch size.')
+  parser.add_argument('--size', type=int, nargs='?', default=224,
+                      help='training image size.')
   parser.add_argument('--condition', type=int, nargs='?', default=100,
                       help='size of the condition embedding.')
   parser.add_argument('--max-epochs', type=int, nargs='?', default=100,
