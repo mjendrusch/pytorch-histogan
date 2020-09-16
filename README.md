@@ -1,6 +1,6 @@
 # PyTorch-HistoGAN
 
-Generative adversarial networks for histology images implemented using [PyTorch](https://github.com/pytorch/pytorch) + [torchsupport](https://github.com/mjendrusch/torchsupport).
+Generative adversarial networks for histology images implemented using [PyTorch](https://github.com/pytorch/pytorch) + [torchsupport](https://github.com/mjendrusch/torchsupport). Based on the [histoGAN Matlab implementation](https://github.com/jnkather/histoGAN).
 
 ## Installation
 
