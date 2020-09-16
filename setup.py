@@ -14,8 +14,14 @@ setuptools.setup(
   url="https://github.com/mjendrusch/pytorch-histogan/",
   packages=setuptools.find_packages(),
   classifiers=(
-      "Programming Language :: Python :: 3",
-      "License :: OSI Approved :: MIT License",
-      "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
   ),
+  install_requires=[
+    'torch',
+    'torchvision',
+    'numpy',
+    'torchsupport @ git+https://github.com/mjendrusch/torchsupport@master',
+  ]
 )

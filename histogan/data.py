@@ -10,6 +10,7 @@ class MsiMssCrc(Dataset):
 
   def __init__(self, path, mode=0, transform=None):
     self.data = ImageFolder(path)
+    self.kinds = self.data.classes
     self.transform = transform or (lambda x: x)
     self.mode = mode
     self.size = len(self.data) // 2

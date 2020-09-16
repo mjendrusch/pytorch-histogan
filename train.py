@@ -11,10 +11,12 @@ if __name__ == "__main__":
   opt = parse_args()
 
   data = GANData(opt.path)
+  size = data[0][0].size(-1) # get size from the dataset.
 
   generator, discriminator = get_histo_GAN(
-    opt.size,
+    size,
     mode=opt.mode,
+    condition_size=len(data.kinds),
     condition_embedding_size=opt.condition
   )
 

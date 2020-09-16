@@ -15,7 +15,7 @@ class MsiTraining(RothGANTraining):
           image
           for image in view[hit]
         ], dim=-1)
-        kind = "mss" if label else "msi"
+        kind = self.data.kinds[label]
         self.writer.add_image(f"sample {kind}", images, self.step_id)
 
   def mixing_key(self, data):
