@@ -1,2 +1,4 @@
 .vscode
 *.torch
+__pycache__
+*.meta
